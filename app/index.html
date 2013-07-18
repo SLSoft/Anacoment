@@ -1,28 +1,37 @@
 <!doctype html>
-<html lang="en" ng-app="myApp">
+<html lang="en" ng-app="anacoment">
 <head>
   <meta charset="utf-8">
-  <title>My AngularJS App</title>
+  <title>数据统计分析管理系统</title>
   <link rel="stylesheet" href="css/app.css"/>
+  <link rel="stylesheet" href="http://yandex.st/highlightjs/7.3/styles/default.min.css">
 </head>
 <body>
-  <ul class="menu">
-    <li><a href="#/view1">view1</a></li>
-    <li><a href="#/view2">view2</a></li>
-  </ul>
+  <header>
+    <nav>
+      <ul class="menu">
+        <li><a href="#/dayStat">时间趋势分析</a></li>
+        <li><a href="#/circularHeat">每日时段热力分析</a></li>
+      </ul>
+    </nav>
+  </header>
 
   <div ng-view></div>
+  <footer>
+    <header>
+      <h5>
+        copyright: SLSoft 2013
+      </h5>
+    </header>
+  </footer>
 
-  <div>Angular seed app: v<span app-version></span></div>
-
-  <!-- In production use:
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
-  -->
-  <script src="lib/angular/angular.js"></script>
-  <script src="js/app.js"></script>
-  <script src="js/services.js"></script>
-  <script src="js/controllers.js"></script>
-  <script src="js/filters.js"></script>
-  <script src="js/directives.js"></script>
+<script src="lib/d3/d3.v3.js"></script>
+<script src="lib/d3/circularHeatChart.js"></script>
+<script src="lib/angular/angular.js"></script>
+<script src="js/app.js"></script>
+<script src="js/services.js"></script>
+<script src="js/controllers.js"></script>
+<script src="js/filters.js"></script>
+<script src="js/directives.js"></script>
 </body>
 </html>
