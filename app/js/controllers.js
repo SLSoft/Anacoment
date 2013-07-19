@@ -3,10 +3,12 @@
 /* Controllers */
 
 angular.module('ana.controllers', []).
-  controller('MyCtrl1', [function() {
+  controller('generalCtrl', ['$scope', function($scope) {
+  	$scope.ip = 5422;
+  	$scope.pv = 2311;
+  	$scope.uv = 3604;
 
-  }])
-  .controller('MyCtrl2', [function() {
+  	setInterval(function(scope){scope.pv += 1; alert(scope.pv);}($scope), 1000);
 
   }])
   .controller('circularHeatCtrl',['$scope', function($scope){

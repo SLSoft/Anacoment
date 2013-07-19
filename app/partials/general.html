@@ -1,0 +1,29 @@
+<h1>网站名称</h1>
+<section ng-controller="generalCtrl">
+	<ul>
+		<li>
+			<h3>今日浏览量PV</h3>
+			<h2 ng-model="pv"></h2>
+			<ul>
+				<li>较昨天同时段<span ng-bind="pv"></span></li>
+				<li>较上周同时段{{pv}}</li>
+			</ul>
+		</li>
+		<li>
+			<h3>今日独立IP</h3>
+			<h2 ng-model="ip"></h2>
+			<ul>
+				<li>较昨天同时段{{ip}}</li>
+				<li>较上周同时段{{ip}}</li>
+			</ul>
+		</li>
+		<li>
+			<h3>今日用户量UV</h3>
+			<h2 ng-model="uv"></h2>
+			<ul>
+				<li>较昨天同时段</li>
+				<li>较上周同时段</li>
+			</ul>
+		</li>
+	</ul>
+</section>
