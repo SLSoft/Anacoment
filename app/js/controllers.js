@@ -8,7 +8,7 @@ angular.module('ana.controllers', []).
   	$scope.pv = 2311;
   	$scope.uv = 3604;
 
-  	setInterval(function(scope){scope.pv += 1; alert(scope.pv);}($scope), 1000);
+  	setInterval(function(){$scope.$apply("pv=pv+1")}, 1000);
 
   }])
   .controller('circularHeatCtrl',['$scope', function($scope){

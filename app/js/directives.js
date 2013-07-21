@@ -10,6 +10,24 @@ directives.directive('appVersion', ['version', function(version) {
 	};
 }]);
 
+directives.directive('rtIp', function(){
+	return function(scope, elm, attrs) {
+		setInterval(function(){scope.ip = scope.ip + 1;}, 1000);
+	};
+});
+
+directives.directive('rtPv', function(){
+	return function(scope, elm, attrs) {
+		setInterval(function(){scope.pv = scope.pv + 1;}, 1000);
+	};
+});
+
+directives.directive('rtUv', function(){
+	return function(scope, elm, attrs) {
+		setInterval(function(){scope.uv = scope.uv + 1;}, 1000);
+	};
+});
+
 directives.directive('dayStat', function(){
 	return function(scope, element, attrs, ctrl) {
 		var context_margin = {top: 10, right: 10, bottom: 100, left: 40},

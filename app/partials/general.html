@@ -3,7 +3,7 @@
 	<ul>
 		<li>
 			<h3>今日浏览量PV</h3>
-			<h2 ng-model="pv"></h2>
+			<h2 ng-bind="pv"></h2>
 			<ul>
 				<li>较昨天同时段<span ng-bind="pv"></span></li>
 				<li>较上周同时段{{pv}}</li>
@@ -11,7 +11,7 @@
 		</li>
 		<li>
 			<h3>今日独立IP</h3>
-			<h2 ng-model="ip"></h2>
+			<h2 ng-bind="ip" rt-ip></h2>
 			<ul>
 				<li>较昨天同时段{{ip}}</li>
 				<li>较上周同时段{{ip}}</li>
@@ -26,4 +26,55 @@
 			</ul>
 		</li>
 	</ul>
+</section>
+
+<section>
+  <div>
+    <header>
+      <h3>性别比例</h3>
+      <div></div>
+    </header>
+  </div>
+  <div>
+    <header>
+      <h3>页面排行Top5</h3>
+      <div></div>
+    </header>
+  </div>
+  <div>
+    <header>
+      <h3>访问深度Top5</h3>
+      <div></div>
+    </header>
+  </div>
+  <div>
+    <header>
+      <h3>全部来源</h3>
+      <div></div>
+    </header>
+  </div>
+  <div>
+    <header>
+      <h3>搜索引擎Top5</h3>
+      <div></div>
+    </header>
+  </div>
+  <div>
+    <header>
+      <h3>外部链接Top5</h3>
+      <div></div>
+    </header>
+  </div>
+  <div>
+    <header>
+      <h3>入口页面Top5</h3>
+      <div></div>
+    </header>
+  </div>
+  <div>
+    <header>
+      <h3>网站可用性</h3>
+      <div></div>
+    </header>
+  </div>
 </section>
