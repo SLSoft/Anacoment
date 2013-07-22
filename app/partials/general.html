@@ -3,23 +3,23 @@
 	<ul>
 		<li>
 			<h3>今日浏览量PV</h3>
-			<h2 ng-bind="pv"></h2>
+			<h2 ng-bind="dayStat.pv" ></h2>
 			<ul>
-				<li>较昨天同时段<span ng-bind="pv"></span></li>
-				<li>较上周同时段{{pv}}</li>
+				<li>较昨天同时段<span ng-bind="dayStat.pv"></span></li>
+				<li>较上周同时段{{dayStat.pv}}</li>
 			</ul>
 		</li>
 		<li>
 			<h3>今日独立IP</h3>
-			<h2 ng-bind="ip" rt-ip></h2>
+			<h2 ng-bind="dayStat.ip" ></h2>
 			<ul>
-				<li>较昨天同时段{{ip}}</li>
-				<li>较上周同时段{{ip}}</li>
+				<li>较昨天同时段{{dayStat.ip}}</li>
+				<li>较上周同时段{{dayStat.ip}}</li>
 			</ul>
 		</li>
 		<li>
 			<h3>今日用户量UV</h3>
-			<h2 ng-model="uv"></h2>
+			<h2 ng-bind="dayStat.uv"></h2>
 			<ul>
 				<li>较昨天同时段</li>
 				<li>较上周同时段</li>
@@ -49,7 +49,7 @@
   </div>
   <div>
     <header>
-      <h3>全部来源</h3>
+      <h3>全部来源</h3>
       <div></div>
     </header>
   </div>
