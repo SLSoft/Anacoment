@@ -34,6 +34,9 @@
 #day-stat path {
   fill: steelblue;
 }
+#num-day-chart rect {
+  fill: steelblue;
+}
 .axis path,
 .axis line {
   fill: none;

@@ -12,19 +12,131 @@ directives.directive('appVersion', ['version', function(version) {
 
 directives.directive('totalStat', function(){
   return function(scope, elm, attrs) {
+    var monthlyBubbleChart = dc.bubbleChart("#monthly-bubble-chart");
+
     d3.csv("data/d_event.csv", function(data){ 
       var dateFormat = d3.time.format("%y%m%d");
+      var numberFormat = d3.format(".2f");
+
       data.forEach(function(e){
         e.dd = dateFormat.parse(e.date);
+        e.month = d3.time.month(e.dd);
       }); 
 
       var ndx = crossfilter(data);
       var all = ndx.groupAll();
+
+      //创建各类数据维度
+      var dateDimension = ndx.dimension(function(d){
+        return d.dd;
+      });
+
+      var monthDimension = ndx.dimension(function(d){
+        return d.month;
+      });
+
+      //创建各类辅助函数
+      var quarter = ndx.dimension(function (d) {
+        var month = d.dd.getMonth();
+        if (month <= 3)
+          return "Q1";
+        else if (month > 3 && month <= 5)
+          return "Q2";
+        else if (month > 5 && month <= 7)
+          return "Q3";
+        else
+          return "Q4";
+      });
+      var dayOfWeek = ndx.dimension(function (d) {
+        var day = d.dd.getDay();
+        switch (day) {
+          case 0:
+            return "0.Sun";
+          case 1:
+            return "1.Mon";
+          case 2:
+            return "2.Tue";
+          case 3:
+            return "3.Wed";
+          case 4:
+            return "4.Thu";
+          case 5:
+            return "5.Fri";
+          case 6:
+            return "6.Sat";
+        }
+      });
+
+      //创建数据图
+
+      var monthGroupWithNum = monthDimension.group().reduce(        
+        //add
+        function (p, v) {
+          ++p.count;
+          p.date = v.month;
+          p.absGain += +v.num;
+          p.fluctuation += Math.abs(+v.num);
+          p.sumIndex += (+v.num) / 2;
+          p.avgIndex = p.sumIndex / p.count;
+          p.percentageGain = (p.absGain / p.avgIndex) * 100;
+          p.fluctuationPercentage = (p.fluctuation / p.avgIndex) * 100;
+          return p;
+        },
+        //remove
+        function (p, v) {
+          --p.count;
+          p.date = v.month;
+          p.absGain -= +v.num;
+          p.fluctuation -= Math.abs(+v.num);
+          p.sumIndex -= (+v.num) / 2;
+          p.avgIndex = p.sumIndex / p.count;
+          p.percentageGain = (p.absGain / p.avgIndex) * 100;
+          p.fluctuationPercentage = (p.fluctuation / p.avgIndex) * 100;
+          return p;
+        },
+        //init
+        function () {
+          return {count: 0, date: "2012-5-1", absGain: 0, fluctuation: 0, fluctuationPercentage: 0, sumIndex: 0, avgIndex: 0, percentageGain: 0};
+        }
+      );
+
+      monthlyBubbleChart.width(990)
+      .height(250)
+      .margins({top: 10, right: 50, bottom: 30, left: 40})
+      .dimension(monthDimension)
+      .group(monthGroupWithNum)
+      .transitionDuration(1500)
+      .colors(["#a60000", "#ff0000", "#ff4040", "#ff7373", "#67e667", "#39e639", "#00cc00"])
+      .keyAccessor(function (p) {
+        return p.date;
+      })
+      .valueAccessor(function (p) {
+        return p.value.percentageGain;
+      })
+      .radiusValueAccessor(function (p) {
+        return p.value.fluctuationPercentage;
+      }) 
+      .maxBubbleRelativeSize(0.3)
+      .x(d3.time.scale().domain([new Date(2012, 8, 1), new Date(2013, 5, 31)]))
+      .y(d3.scale.linear().domain([1, 20000]))
+      .r(d3.scale.linear().domain([1, 20000]))
+      .elasticY(true)
+      .yAxisPadding(100)
+      .elasticX(true)
+      .xAxisPadding(500)
+      .renderHorizontalGridLines(true)
+      .renderVerticalGridLines(true)
+      .renderLabel(true)
+      .renderTitle(true)
+      .label(function (p) {
+        return p.key.getFullYear();
+      });
+
       var volumeByMonth = ndx.dimension(function(d) { return d3.time.month(d.dd); });
       var volumeByMonthGroup = volumeByMonth.group()
       .reduceSum(function(d) { return d.num; });
 
-      dc.barChart("#volume-month-chart")
+      dc.barChart("#" + attrs.id )
       .width(990) // (optional) define chart width, :default = 200
       .height(250) // (optional) define chart height, :default = 200
       .transitionDuration(500) // (optional) define chart transition duration, :default = 500
@@ -41,7 +153,7 @@ directives.directive('totalStat', function(){
       // (optional) when elasticX is on whether padding should be applied to x axis domain, :default=0
       .xAxisPadding(500)
       // define x scale
-      .x(d3.time.scale().domain([new Date(2012, 0, 1), new Date(2013, 5, 31)]))
+      .x(d3.time.scale().domain([new Date(2012, 8, 1), new Date(2013, 5, 31)]))
       // (optional) set filter brush rounding
       .round(d3.time.month.round)
       // define x axis units
@@ -54,12 +166,24 @@ directives.directive('totalStat', function(){
       .renderHorizontalGridLines(true)
       // (optional) render vertical grid lines, :default=false
       .renderVerticalGridLines(true)
-      .brushOn(true)
-      // (optional) whether svg title element(tooltip) should be generated for each bar using
-      // the given function, :default=no
       .title(function(d) { return "Value: " + d.value; })
       // (optional) whether chart should render titles, :default = false
       .renderTitle(true);
+
+      var dayOfWeekGroup = dayOfWeek.group().reduceSum(function(d){return d.num});
+      dc.rowChart("#days-of-week-chart").width(180)
+      .height(180)
+      .margins({top: 20, left: 10, right: 10, bottom: 20})
+      .group(dayOfWeekGroup)
+      .dimension(dayOfWeek)
+      .colors(['#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#dadaeb'])
+      .label(function (d){
+        return d.key.split(".")[1];
+      })
+      .title(function(d){return d.value;})
+      .elasticX(true)
+      .xAxis().ticks(4);
+      
       dc.renderAll();
     }); 
 
